@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/datasender/db" VERSION="20211215" COMMENT="XMLDB file for Moodle local/datasender"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_datasender_queue" COMMENT="queue for data that is to be sent to an external endpoint">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="event" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the event that triggered this"/>
+        <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="data to be sent, typically xml or json"/>
+        <FIELD NAME="adapter" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="what will pick up and send the data to the endpoint."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
