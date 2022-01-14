@@ -65,7 +65,7 @@ class observer {
         $queuedata['Quiz_Id__c']  = $quiz->idnumber;
         $queuedata['Grade__c'] = $gradetosend;
 
-        $endpoint = 'https://d58000000pmoqeay--moodle.my.salesforce.com/services/data/v53.0/sobjects/Quiz__c';
+        $endpoint = get_config('local_tlconnect','endpointurl').'/services/data/v53.0/sobjects/Quiz__c';
         $logdata = 'attempt_submitted event by user: '.$user->username .' for Quiz: '
             .$quiz->name .' on course:'.$course->shortname. ' gradesent:'.$gradetosend .' quiz idnumber:'.$quiz->idnumber;
 
@@ -128,7 +128,7 @@ class observer {
         $queuedata['Course__c'] = $course->idnumber;
         $queuedata['Date_Of_Enrolment__c'] = date("Y-m-d\TH:i:s", $eventdata['timecreated']);
 
-        $endpoint = 'https://d58000000pmoqeay--moodle.my.salesforce.com/services/data/v53.0/sobjects/Enrolment__c';
+        $endpoint = get_config('local_tlconnect','endpointurl').'/services/data/v53.0/sobjects/Enrolment__c';
         $logdata = 'user_enrolment_created event for user:'.$user->username .' on course:'.$course->shortname;
 
         self::write_queuedata($queuedata, 'user_enrolment_created', $logdata, $endpoint);
@@ -162,7 +162,8 @@ class observer {
         $queuedata['Title__c']  = $assign->name;
         $queuedata['Assessment_URL__c'] = $CFG->wwwroot.'/mod/assign/view.php?id='.$eventdata['contextinstanceid'];
         $queuedata['Submission_Date__c'] = date("Y-m-d\TH:i:s", $eventdata['timecreated']);
-        $endpoint = 'https://d58000000pmoqeay--moodle.my.salesforce.com/services/data/v53.0/sobjects/Assessment__c';
+
+        $endpoint = get_config('local_tlconnect','endpointurl').'/services/data/v53.0/sobjects/Assessment__c';
         $logdata = 'assessable submitted event user: '.$user->username .' course:'.$course->shortname;
         self::write_queuedata($queuedata, 'assessable_submitted', $logdata, $endpoint);
 
@@ -190,7 +191,7 @@ class observer {
         $assessor = $DB->get_record('user', ['id' => $markerid]);
 
         $queuedata['Assessor__r']['APIID__c'] = $assessor->username;
-        $endpoint = "https://d58000000pmoqeay--moodle.my.salesforce.com/services/data/v53.0/sobjects/Assessment__c/Assessment_ID__c/";
+        $endpoint = get_config('local_tlconnect','endpointurl').'/services/data/v53.0/sobjects/Assessment__c/Assessment_ID__c/';
         $endpoint .= $candidate->username.'_'.$assign->idnumber;
 
         $logdata = 'marker_updated event candidate: '.$candidate->username .' marker:'.$assessor->username.' course:'.$course->shortname. ' assign:'.$assign->name;
@@ -264,7 +265,7 @@ class observer {
         } else if ($workflowstate == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
             $queuedata['Marking_Workflow_Status__c'] = 'Released';
         }
-        $endpoint = "https://d58000000pmoqeay--moodle.my.salesforce.com/services/data/v53.0/sobjects/Assessment__c/Assessment_ID__c/";
+        $endpoint = get_config('local_tlconnect','endpointurl').'/services/data/v53.0/sobjects/Assessment__c/Assessment_ID__c/';
         $endpoint .= $candidate->username.'_'.$assign->idnumber;
 
         $logdata = $eventname.'  :'.$workflowstate. ' user:'.$candidate->username. ' assignment:'. $assign->name .' course:'.$course->shortname;
